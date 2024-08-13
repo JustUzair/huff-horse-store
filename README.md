@@ -1,3 +1,17 @@
+# About this project
+
+This project implements a basic smart contract in all `assembly language` in order to optimize the contracts further when compared to solidity and also to understand the intricacies of solidity better.
+
+The project includes the code, the guide to run the code, `differential tests` to test the huff code in `foundry`.
+
+# Important
+
+- This project utilized `differential testing`, for that purpose the [foundry-huff](https://github.com/huff-language/foundry-huff) package is used.
+
+```bash
+forge install huff-language/foundry-huff --no-commit
+```
+
 ## Docs
 
 - Refer to EVM opcodes here : [evm.codes](https://www.evm.codes/)
@@ -24,6 +38,8 @@ contract HorseStore {
 
 ### Compiling Huff
 
+- Compiling `.huff` files
+
 ```javascript
 huffc src/Horse-Store-V1/HorseStore.huff
 ```
@@ -34,6 +50,14 @@ huffc src/Horse-Store-V1/HorseStore.huff
 $ huffc src/Horse-Store-V1/HorseStore.huff -b
 ⠙ Compiling...
 60008060093d393df3
+```
+
+- Add `--bin-runtime` to get the opcode string for the code
+
+```javascript
+$ huffc src/Horse-Store-V1/HorseStore.huff --bin-runtime
+⠙ Compiling...
+5f3560e01c8063cdfead2e1461001d5763e026c01714610024575f5ffd5b6004355f55005b
 ```
 
 ### Function Selector
@@ -76,8 +100,6 @@ Type: bytes4
 $ cast sig "readNumberOfHorses()"
 0xe026c017
 ```
-
-## Opcodes & Assembly
 
 ## Foundry
 
