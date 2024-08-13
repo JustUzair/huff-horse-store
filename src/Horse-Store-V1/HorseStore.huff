@@ -1,0 +1,62 @@
+/* Interface */
+
+/* Storage Slots */
+
+/* Methods */
+
+// simple contract creation bytecode with empty MAIN macro - 60008060093d393df3 
+// simple contract creation bytecode with PUSH0 in MAIN macro - 60018060093d393df35f - 5f denotes PUSH0, see evm.codes for more info
+
+
+#define macro MAIN() = takes(0) returns(0) {
+    // PUSH0   // 0x00 - opcode
+    0x00 // opcode - PUSH0; [0]
+    // 0x02 // opcode - PUSH2; stack [2, 0] BOTTOM denoted by rightmost 
+    calldataload // 0x35 - opcode; [calldata]; first 32 bytes of calldata
+    //example :  0xcdfead2ea1108e2f55c76e0e628baabf45e443d3ee20ba4b95fb0ee1cdb1a69a - first 4 bytes - 0xcdfead2e - function selector for "updateHorseNumber(uint256)"
+    push1 0xe0 // shift 224 bits/8 bits = 28 bytes to the right to get first 4 bytes i.e function selector; [0xe0, calldata] BOTTOM
+    shr // do shift right by stack[top] on stack[top-1]; [calldata >> 28]; [calldata >> 28] = 0xcdfead2e; [function_selector] 
+
+    // **** Stack Top contains function selector at this point ****
+    // check which selector is present and jump to that function for execution
+    // *** We have follwing functions in this contract ***
+    // updateHorseNumber(uint256) - 0xcdfead2e
+    // "readNumberOfHorses()" 0xe026c017
+    dup1 // [function_selector, function_selector] BOTTOM
+    // *** check for updateHorseNumber(uint256) function selector ***
+    push4 0xcdfead2e // [0xcdfead2e, function_selector, function_selector] BOTTOM
+    eq // check if stack[top] == stack[top-1]; [true_if_function_selector_matches, function_selector] BOTTOM
+
+    // *** jump to update function if function selector matches ***
+    updateHorseNumberJump // [programCounter, true/false, function_selector] BOTTOM
+    jumpi // [jump_destination; jump_if_true, function_selector] BOTTOM
+
+
+    // *** if above fails check for readNumberOfHorses() function selector ***
+    // @note - at this point stack[top] contains only function selector from dup1 and others are all popped
+    push4 0xe026c017 // [0xe026c017, function_selector] BOTTOM
+    eq // check if stack[top] == stack[top-1]; [true_if_function_selector_matches]
+    // *** jump to read function if function selector matches ***
+    readNumberOfHorsesJump // [programCounter, true/false] BOTTOM
+    jumpi // [] BOTTOM
+    push0 // [0x00] BOTTOM
+    push0 // [0x00, 0x00] BOTTOM
+    revert
+    
+    
+    updateHorseNumberJump:
+        SET_NUMBER_OF_HORSES() // jump to updateHorseNumber function
+    readNumberOfHorsesJump:
+        READ_NUMBER_OF_HORSES() // jump to readNumberOfHorses function
+}
+
+
+#define macro SET_NUMBER_OF_HORSES() = takes(0) returns(0) {
+    push0 
+    push0 
+    return
+}
+
+#define macro READ_NUMBER_OF_HORSES() = takes(0) returns(0) {
+
+}
