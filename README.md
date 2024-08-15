@@ -101,6 +101,11 @@ $ cast sig "readNumberOfHorses()"
 0xe026c017
 ```
 
+## Execution opcode for deeper look into the working of huff and solidity.
+```bash
+forge test --debug test_readValue --match-path *Huff*
+```
+
 ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**

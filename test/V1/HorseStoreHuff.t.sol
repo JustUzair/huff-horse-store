@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 // import {Test} from "forge-std/Test.sol";
-import {Base_TestV1, HorseStore} from "./Base_TestV1.t.sol";
+import {Base_TestV1, HorseStore,IHorseStore} from "./Base_TestV1.t.sol";
 import {HuffDeployer} from "foundry-huff/HuffDeployer.sol";
 import {HuffConfig} from "foundry-huff/HuffConfig.sol";
 
@@ -13,6 +13,6 @@ contract HorseStoreHuff is Base_TestV1 {
     string constant HORSE_STORE_HUFF_FILE = "Horse-Store-V1/HorseStore";
 
     function setUp() public override {
-        horseStore = HorseStore(HuffDeployer.config().deploy(HORSE_STORE_HUFF_FILE));
+        horseStore = IHorseStore(HuffDeployer.config().deploy(HORSE_STORE_HUFF_FILE));
     }
 }
